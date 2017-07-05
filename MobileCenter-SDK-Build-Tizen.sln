@@ -27,6 +27,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.Mobile.Tize
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Microsoft.Azure.Mobile.Crashes.Shared.Targets", "SDK\MobileCenterCrashes\Microsoft.Azure.Mobile.Crashes.Shared.Targets\Microsoft.Azure.Mobile.Crashes.Shared.Targets.shproj", "{CAE55C79-1601-400D-86BF-03AB8CC5B8B9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MobileCenterPush", "MobileCenterPush", "{00F8F040-1E65-42E4-8166-32FEE03266A1}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Microsoft.Azure.Mobile.Push.Windows.Shared", "SDK\MobileCenterPush\Microsoft.Azure.Mobile.Push.Windows.Shared\Microsoft.Azure.Mobile.Push.Windows.Shared.shproj", "{BA25A66A-FCEA-49C2-A85A-0F6F54463675}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Microsoft.Azure.Mobile.Push.Shared", "SDK\MobileCenterPush\Microsoft.Azure.Mobile.Push.Shared\Microsoft.Azure.Mobile.Push.Shared.shproj", "{A5D2FD20-13EE-4CA4-8278-09520CC376CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Azure.Mobile.Push.Tizen", "SDK\MobileCenterPush\Microsoft.Azure.Mobile.Push.Tizen\Microsoft.Azure.Mobile.Push.Tizen.csproj", "{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SDK\MobileCenterAnalytics\Microsoft.Azure.Mobile.Analytics.Windows.Shared\Microsoft.Azure.Mobile.Analytics.Windows.Shared.projitems*{200073bf-fa7e-42af-8ed5-aa50be7c0295}*SharedItemsImports = 4
@@ -35,10 +43,14 @@ Global
 		SDK\MobileCenterAnalytics\Microsoft.Azure.Mobile.Analytics.Windows.Shared\Microsoft.Azure.Mobile.Analytics.Windows.Shared.projitems*{7ce5bf9e-3650-4151-8b54-c1301aa73606}*SharedItemsImports = 13
 		SDK\MobileCenter\Microsoft.Azure.Mobile.Shared\Microsoft.Azure.Mobile.Shared.projitems*{8dc8f88c-85f0-49c7-b03f-8354a1393197}*SharedItemsImports = 4
 		SDK\MobileCenter\Microsoft.Azure.Mobile.Windows.Shared\Microsoft.Azure.Mobile.Windows.Shared.projitems*{8dc8f88c-85f0-49c7-b03f-8354a1393197}*SharedItemsImports = 4
+		SDK\MobileCenterPush\Microsoft.Azure.Mobile.Push.Shared\Microsoft.Azure.Mobile.Push.Shared.projitems*{a5d2fd20-13ee-4ca4-8278-09520cc376cd}*SharedItemsImports = 13
 		SDK\MobileCenter\Microsoft.Azure.Mobile.Windows.Shared\Microsoft.Azure.Mobile.Windows.Shared.projitems*{b4e6ad1c-21a0-43a4-bd73-ed9bfc19be6f}*SharedItemsImports = 13
+		SDK\MobileCenterPush\Microsoft.Azure.Mobile.Push.Windows.Shared\Microsoft.Azure.Mobile.Push.Windows.Shared.projitems*{ba25a66a-fcea-49c2-a85a-0f6f54463675}*SharedItemsImports = 13
 		SDK\MobileCenter\Microsoft.Azure.Mobile.Shared\Microsoft.Azure.Mobile.Shared.projitems*{c6c4937c-d5f4-4e00-8b51-8d826ad83c5e}*SharedItemsImports = 13
 		SDK\MobileCenterCrashes\Microsoft.Azure.Mobile.Crashes.Shared.Targets\Microsoft.Azure.Mobile.Crashes.Shared.Targets.projitems*{cae55c79-1601-400d-86bf-03ab8cc5b8b9}*SharedItemsImports = 13
 		SDK\MobileCenterCrashes\Microsoft.Azure.Mobile.Crashes.Shared\Microsoft.Azure.Mobile.Crashes.Shared.projitems*{db5a0b7d-8090-4a0c-97c7-cdf17aacaaf2}*SharedItemsImports = 13
+		SDK\MobileCenterPush\Microsoft.Azure.Mobile.Push.Shared\Microsoft.Azure.Mobile.Push.Shared.projitems*{f78aa144-f55f-42ef-bee8-d7e8bd8b7f11}*SharedItemsImports = 4
+		SDK\MobileCenterPush\Microsoft.Azure.Mobile.Push.Windows.Shared\Microsoft.Azure.Mobile.Push.Windows.Shared.projitems*{f78aa144-f55f-42ef-bee8-d7e8bd8b7f11}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -211,6 +223,54 @@ Global
 		{8DC8F88C-85F0-49C7-B03F-8354A1393197}.Release|x64.Build.0 = Release|Any CPU
 		{8DC8F88C-85F0-49C7-B03F-8354A1393197}.Release|x86.ActiveCfg = Release|Any CPU
 		{8DC8F88C-85F0-49C7-B03F-8354A1393197}.Release|x86.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|Any CPU.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|ARM.ActiveCfg = Release|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|ARM.Build.0 = Release|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|iPhoneSimulator.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|x64.ActiveCfg = Release|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|x64.Build.0 = Release|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|x86.ActiveCfg = Release|x86
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Ad-Hoc|x86.Build.0 = Release|x86
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|Any CPU.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|ARM.ActiveCfg = Release|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|ARM.Build.0 = Release|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|iPhoneSimulator.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|x64.ActiveCfg = Release|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|x64.Build.0 = Release|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|x86.ActiveCfg = Release|x86
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.AppStore|x86.Build.0 = Release|x86
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|ARM.Build.0 = Debug|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|x64.ActiveCfg = Debug|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|x64.Build.0 = Debug|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|x86.ActiveCfg = Debug|x86
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Debug|x86.Build.0 = Debug|x86
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|ARM.ActiveCfg = Release|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|ARM.Build.0 = Release|ARM
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|iPhone.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|x64.ActiveCfg = Release|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|x64.Build.0 = Release|x64
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|x86.ActiveCfg = Release|x86
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -227,6 +287,10 @@ Global
 		{2F715D51-643C-4F7F-9EA4-6554D4EECCB2} = {7FAAA086-4453-4B62-AD9A-2E2ED216E3C4}
 		{8DC8F88C-85F0-49C7-B03F-8354A1393197} = {13744327-9529-490B-A970-06A1D3144117}
 		{CAE55C79-1601-400D-86BF-03AB8CC5B8B9} = {7FAAA086-4453-4B62-AD9A-2E2ED216E3C4}
+		{00F8F040-1E65-42E4-8166-32FEE03266A1} = {8CDD4942-2E48-4CF7-AC99-85718F238455}
+		{BA25A66A-FCEA-49C2-A85A-0F6F54463675} = {00F8F040-1E65-42E4-8166-32FEE03266A1}
+		{A5D2FD20-13EE-4CA4-8278-09520CC376CD} = {00F8F040-1E65-42E4-8166-32FEE03266A1}
+		{F78AA144-F55F-42EF-BEE8-D7E8BD8B7F11} = {00F8F040-1E65-42E4-8166-32FEE03266A1}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
