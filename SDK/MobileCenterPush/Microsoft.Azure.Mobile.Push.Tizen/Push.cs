@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tizen.Messaging.Push;
+using Tizen.Applications;
+using System.Xml;
 //using Windows.ApplicationModel.Activation;
 //using Windows.Data.Xml.Dom;
 //using Windows.Networking.PushNotifications;
@@ -28,36 +30,38 @@ namespace Microsoft.Azure.Mobile.Push
         /// This method call is needed to handle click on push to trigger the portable PushNotificationReceived event.
         /// </summary>
         /// <param name="e">OnLaunched method event</param>
-        //public static void CheckLaunchedFromNotification(LaunchActivatedEventArgs e)
-        //{
-        //    Instance.InstanceCheckLaunchedFromNotification(e);
-        //}
+        public static void CheckLaunchedFromNotification(AppControlReceivedEventArgs e)
+        {
+            Instance.InstanceCheckLaunchedFromNotification(e);
+        }
 
-        //private void InstanceCheckLaunchedFromNotification(LaunchActivatedEventArgs e)
-        //{
-        //    IDictionary<string, string> customData = null;
-        //    _mutex.Lock();
-        //    try
-        //    {
-        //        if (!IsInactive)
-        //        {
-        //            customData = ParseLaunchString(e?.Arguments);
-        //        }
-        //    }
-        //    finally
-        //    {
-        //        _mutex.Unlock();
-        //    }
-        //    if (customData != null)
-        //    {
-        //        PushNotificationReceived?.Invoke(null, new PushNotificationReceivedEventArgs()
-        //        {
-        //            Title = null,
-        //            Message = null,
-        //            CustomData = customData
-        //        });
-        //    }
-        //}
+        private void InstanceCheckLaunchedFromNotification(AppControlReceivedEventArgs e)
+        {
+            IDictionary<string, string> customData = null;
+            _mutex.Lock();
+            try
+            {
+                if (!IsInactive)
+                {
+                    // TODO TIZEN retrieve custom data from AppControl Extra Data
+                    // TODO TIZEN check retrieval of push notification from App control
+                    //customData = ParseExtraData(e?.ReceivedAppControl.ExtraData);
+                }
+            }
+            finally
+            {
+                _mutex.Unlock();
+            }
+            if (customData != null)
+            {
+                PushNotificationReceived?.Invoke(null, new PushNotificationReceivedEventArgs()
+                {
+                    Title = null,
+                    Message = null,
+                    CustomData = customData
+                });
+            }
+        }
 
         /// <summary>
         /// If enabled, register push channel and send URI to backend.
@@ -66,101 +70,108 @@ namespace Microsoft.Azure.Mobile.Push
         /// </summary>
         private void ApplyEnabledState(bool enabled)
         {
-            //if (enabled)
-            //{
-            //    // We expect caller of this method to lock on _mutex, we can't do it here as that lock is not recursive
-            //    var stateSnapshot = _stateKeeper.GetStateSnapshot();
-            //    Task.Run(async () =>
-            //    {
-            //        var channel = await new WindowsPushNotificationChannelManager().CreatePushNotificationChannelForApplicationAsync()
-            //            .AsTask().ConfigureAwait(false);
-            //        try
-            //        {
-            //            _mutex.Lock(stateSnapshot);
-            //            var pushToken = channel.Uri;
-            //            if (!string.IsNullOrEmpty(pushToken))
-            //            {
-            //                // Save channel member
-            //                _channel = channel;
+            if (enabled)
+            {
+                // We expect caller of this method to lock on _mutex, we can't do it here as that lock is not recursive
+                var stateSnapshot = _stateKeeper.GetStateSnapshot();
+                Task.Run(async () =>
+                {
+                    // TODO TIZEN connect and register to push service
+                    // TODO TIZEN? define custom channel?
+                    //var channel = await new WindowsPushNotificationChannelManager().CreatePushNotificationChannelForApplicationAsync()
+                    //    .AsTask().ConfigureAwait(false);
+                    try
+                    {
+                        _mutex.Lock(stateSnapshot);
+                        // TODO TIZEN retrieve pushToken == registration ID
+                        //var pushToken = channel.Uri;
+                        var pushToken = PushClient.GetRegistrationId();
+                        if (!string.IsNullOrEmpty(pushToken))
+                        {
+                            // Save channel member
+                            //_channel = channel;
 
-            //                // Subscribe to push
-            //                channel.PushNotificationReceived += OnPushNotificationReceivedHandler;
+                            // Subscribe to push
+                            PushClient.NotificationReceived += OnPushNotificationReceivedHandler;
 
-            //                // Send channel URI to backend
-            //                MobileCenterLog.Debug(LogTag, $"Push token '{pushToken}'");
-            //                var pushInstallationLog = new PushInstallationLog(0, null, pushToken, Guid.NewGuid());
-            //                await Channel.Enqueue(pushInstallationLog).ConfigureAwait(false);
-            //            }
-            //            else
-            //            {
-            //                MobileCenterLog.Error(LogTag, "Push service registering with Mobile Center backend has failed.");
-            //            }
-            //        }
-            //        catch (StatefulMutexException)
-            //        {
-            //            MobileCenterLog.Warn(LogTag, "Push Enabled state changed after creating channel.");
-            //        }
-            //        finally
-            //        {
-            //            _mutex.Unlock();
-            //        }
-            //    });
-            //}
-            //else if (_channel != null)
-            //{
-            //    _channel.PushNotificationReceived -= OnPushNotificationReceivedHandler;
-            //}
+                            // Send channel URI to backend
+                            MobileCenterLog.Debug(LogTag, $"Push token '{pushToken}'");
+                            var pushInstallationLog = new PushInstallationLog(0, null, pushToken, Guid.NewGuid());
+                            await Channel.Enqueue(pushInstallationLog).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            MobileCenterLog.Error(LogTag, "Push service registering with Mobile Center backend has failed.");
+                        }
+                    }
+                    catch (StatefulMutexException)
+                    {
+                        MobileCenterLog.Warn(LogTag, "Push Enabled state changed after creating channel.");
+                    }
+                    finally
+                    {
+                        _mutex.Unlock();
+                    }
+                });
+            }
+            else /*if (_channel != null)*/
+            {
+                PushClient.NotificationReceived -= OnPushNotificationReceivedHandler;
+            }
         }
 
-        //private void OnPushNotificationReceivedHandler(PushNotificationChannel sender, WindowsPushNotificationReceivedEventArgs e)
-        //{
-        //    if (e.NotificationType == PushNotificationType.Toast)
-        //    {
-        //        var content = e.ToastNotification.Content;
-        //        MobileCenterLog.Debug(LogTag, $"Received push notification payload: {content.GetXml()}");
-        //        if (_lifecycleHelper.IsSuspended)
-        //        {
-        //            MobileCenterLog.Debug(LogTag, "Application in background. Push callback will be called when user clicks the toast notification.");
-        //        }
-        //        else
-        //        {
-        //            var pushNotification = ParseMobileCenterPush(content);
-        //            if (pushNotification != null)
-        //            {
-        //                e.Cancel = true;
-        //                PushNotificationReceived?.Invoke(sender, pushNotification);
-        //                MobileCenterLog.Debug(LogTag, "Application in foreground. Intercept push notification and invoke push callback.");
-        //            }
-        //            else
-        //            {
-        //                MobileCenterLog.Debug(LogTag, "Push ignored. It was not sent through Mobile Center.");
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        MobileCenterLog.Debug(LogTag, $"Push ignored. We only handle Toast notifications but PushNotificationType is '{e.NotificationType}'.");
-        //    }
-        //}
+        private void OnPushNotificationReceivedHandler(object sender, TizenPushNotificationReceivedEventArgs e)
+        {
+            // TODO TIZEN check Tizen push types
+            // TODO TIZEN check toast notification
+            if (e.Type == 0) // Toast type?
+            {
+                var message = e.Message;
+                var appData = e.AppData;
+                MobileCenterLog.Debug(LogTag, $"Received push notification payload: /*{content.GetXml()}*/");
+                if (_lifecycleHelper.IsSuspended)
+                {
+                    MobileCenterLog.Debug(LogTag, "Application in background. Push callback will be called when user clicks the toast notification.");
+                }
+                else
+                {
+                    var pushNotification = ParseMobileCenterPush(message, appData);
+                    if (pushNotification != null)
+                    {
+                        //e.Cancel = true;
+                        PushNotificationReceived?.Invoke(sender, pushNotification);
+                        MobileCenterLog.Debug(LogTag, "Application in foreground. Intercept push notification and invoke push callback.");
+                    }
+                    else
+                    {
+                        MobileCenterLog.Debug(LogTag, "Push ignored. It was not sent through Mobile Center.");
+                    }
+                }
+            }
+            else
+            {
+                MobileCenterLog.Debug(LogTag, $"Push ignored. We only handle Toast notifications but PushNotificationType is '{e.NotificationType}'.");
+            }
+        }
 
-        //private static PushNotificationReceivedEventArgs ParseMobileCenterPush(XmlDocument content)
-        //{
-        //    // Check if mobile center push (it always has launch attribute with JSON object having mobile_center key)
-        //    var launch = content.SelectSingleNode("/toast/@launch")?.NodeValue.ToString();
-        //    var customData = ParseLaunchString(launch);
-        //    if (customData == null)
-        //    {
-        //        return null;
-        //    }
+        private static PushNotificationReceivedEventArgs ParseMobileCenterPush(XmlDocument content)
+        {
+            // Check if mobile center push (it always has launch attribute with JSON object having mobile_center key)
+            var launch = content.SelectSingleNode("/toast/@launch")?.Value;
+            var customData = ParseLaunchString(launch);
+            if (customData == null)
+            {
+                return null;
+            }
 
-        //    // Parse title and message using identifiers
-        //    return new PushNotificationReceivedEventArgs()
-        //    {
-        //        Title = content.SelectSingleNode("/toast/visual/binding/text[@id='1']")?.InnerText,
-        //        Message = content.SelectSingleNode("/toast/visual/binding/text[@id='2']")?.InnerText,
-        //        CustomData = customData
-        //    };
-        //}
+            // Parse title and message using identifiers
+            return new PushNotificationReceivedEventArgs()
+            {
+                Title = content.SelectSingleNode("/toast/visual/binding/text[@id='1']")?.InnerText,
+                Message = content.SelectSingleNode("/toast/visual/binding/text[@id='2']")?.InnerText,
+                CustomData = customData
+            };
+        }
 
         private static Dictionary<string, string> ParseLaunchString(string launchString)
         {
