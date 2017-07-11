@@ -35,6 +35,27 @@ namespace Microsoft.Azure.Mobile.Push
             Instance.InstanceCheckLaunchedFromNotification(e);
         }
 
+        private static string _appPushId = null;
+
+        public static string TizenPushId
+        {
+            get
+            {
+                if (_appPushId == null)
+                {
+                    return "";
+                }
+                return _appPushId;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _appPushId = value;
+                }
+            }
+        }
+
         private void InstanceCheckLaunchedFromNotification(AppControlReceivedEventArgs e)
         {
             IDictionary<string, string> customData = null;
@@ -80,12 +101,14 @@ namespace Microsoft.Azure.Mobile.Push
                     // TODO TIZEN? define custom channel?
                     //var channel = await new WindowsPushNotificationChannelManager().CreatePushNotificationChannelForApplicationAsync()
                     //    .AsTask().ConfigureAwait(false);
+
+                    var regId = await TizenPushNotificationManager.RegisterTizenPushService();
                     try
                     {
                         _mutex.Lock(stateSnapshot);
                         // TODO TIZEN retrieve pushToken == registration ID
                         //var pushToken = channel.Uri;
-                        var pushToken = PushClient.GetRegistrationId();
+                        var pushToken = regId;
                         if (!string.IsNullOrEmpty(pushToken))
                         {
                             // Save channel member
@@ -114,9 +137,11 @@ namespace Microsoft.Azure.Mobile.Push
                     }
                 });
             }
-            else /*if (_channel != null)*/
+            else
             {
                 PushClient.NotificationReceived -= OnPushNotificationReceivedHandler;
+                // TODO TIZEN Disconnect only if push service was disconnected during MC launch
+                PushClient.PushServiceDisconnect();
             }
         }
 
@@ -124,11 +149,13 @@ namespace Microsoft.Azure.Mobile.Push
         {
             // TODO TIZEN check Tizen push types
             // TODO TIZEN check toast notification
-            if (e.Type == 0) // Toast type?
+            // TODO If not received via mobile center, let default notification handler handle it.
+
+            if (true /*e.Type == 0*/) // Toast type?
             {
                 var message = e.Message;
                 var appData = e.AppData;
-                MobileCenterLog.Debug(LogTag, $"Received push notification payload: /*{content.GetXml()}*/");
+                MobileCenterLog.Debug(LogTag, $"Received push notification payload: {message}, {appData}");
                 if (_lifecycleHelper.IsSuspended)
                 {
                     MobileCenterLog.Debug(LogTag, "Application in background. Push callback will be called when user clicks the toast notification.");
@@ -150,9 +177,18 @@ namespace Microsoft.Azure.Mobile.Push
             }
             else
             {
-                MobileCenterLog.Debug(LogTag, $"Push ignored. We only handle Toast notifications but PushNotificationType is '{e.NotificationType}'.");
+                MobileCenterLog.Debug(LogTag, $"Push ignored. We only handle Toast notifications but PushNotificationType is '{e.Type}'");
             }
         }
+        private static PushNotificationReceivedEventArgs ParseMobileCenterPush(string message, string  appData)
+        {
+            // TODO extract Title and Message from message parameter string
+            // TODO extract customData key-values from appData parameter string
+
+            // Check if mobile center push (it always has launch attribute with JSON object having mobile_center key)
+            return null;
+        }
+
 
         private static PushNotificationReceivedEventArgs ParseMobileCenterPush(XmlDocument content)
         {
