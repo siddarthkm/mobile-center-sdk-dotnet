@@ -38,7 +38,7 @@ namespace Microsoft.Azure.Mobile.Push
                     }
             };
             // TODO TIZEN do a check for push ID when initializing
-            PushClient.PushServiceConnect(Push.TizenPushId);
+            PushClient.PushServiceConnect(Push.TizenPushAppId);
             return tcs.Task;
         }
     }
